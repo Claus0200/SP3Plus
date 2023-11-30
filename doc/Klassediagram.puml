@@ -1,0 +1,73 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Main
+class ChillFlix
+class UserMenu
+class User
+abstract class Media
+class Movie
+class Serie
+class E-book
+class CreateMedia
+class TextUI
+
+Main : startProgram()
+
+User : +ID
+User : -Username
+User : -Password
+User : -ArrayList savedMovies
+User : -ArrayList savedSeries
+User : -ArrayList savedE-books
+
+ChillFlix : + ArrayList Movie
+ChillFlix : + ArrayList Series
+ChillFlix : + ArrayList E-books
+ChillFlix : + User user
+ChillFlix : + void getMedia()
+ChillFlix : + void getChoice()
+ChillFlix : + void searchMovie()
+ChillFlix : + void searchCategory()
+ChillFlix : + void showSeenMovies()
+ChillFlix : + void showSavedMovies()
+ChillFlix : + void searchE-books()
+ChillFlix : + void logout()
+ChillFlix : + void playMovie()
+ChillFlix : + void addToWatchLater()
+ChillFlix : + void removeFromWatchLater()
+
+Media : +ID
+Media : -Titel
+Media : -Year
+Media : -ArrayList Category
+Media : -Rating
+Media : -Duration
+Serie : -ArrayList totalEpisodes
+
+CreateMedia : +void createMovie()
+CreateMedia : +void createSerie()
+CreateMedia : +void createE-book()
+
+TextUI : + void printText(String msg)
+TextUI : + String getUserInput()
+
+UserMenu : +void getChoice()
+UserMenu : +void signup()
+UserMenu : +void loadSavedMedia()
+UserMenu : +void login()
+
+User --> UserMenu
+Main --> UserMenu
+UserMenu --> ChillFlix
+Movie --> CreateMedia
+Serie --> CreateMedia
+"E-book" --> CreateMedia
+
+CreateMedia <-- ChillFlix
+TextUI <-> ChillFlix
+Media <|-- Movie
+Media <|-- Serie
+Media <|-- "E-book"
+
+@enduml
