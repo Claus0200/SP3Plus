@@ -1,17 +1,22 @@
 import java.util.ArrayList;
 
-public class CreateMedia {
+public class CreateMedia extends DBConnector {
     static ArrayList<Media> medias = new ArrayList<>();
 
     static FileIO io = new FileIO();
 
-    static ArrayList<Media> loadMediaData() {
-        createMedia("src/100bedstefilm.txt", "Movie");
-        createMedia("src/100bedsteserier.txt","Serie");
+    static ArrayList<Media> loadMediaDataTxt() {
+        createMediaTxt("src/100bedstefilm.txt", "Movie");
+        createMediaTxt("src/100bedsteserier.txt","Serie");
         return medias;
     }
 
-    static void createMedia(String path, String type) {
+    static ArrayList<Media> loadMediaDataDB() {
+        DBConnector.readMovies();
+        return medias;
+    }
+
+    static void createMediaTxt(String path, String type) {
         ArrayList<String> data = io.readMediaData(path);
         for (int i = 0; i < data.size(); i++) {
             String[] row = data.get(i).split(";");
@@ -43,4 +48,24 @@ public class CreateMedia {
             }
         }
     }
+
+    public static void createMediaDB() {
+
+      ArrayList<Media> DatabaseMedias = new ArrayList<>();
+      for(int i = 0; Data)
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
 }

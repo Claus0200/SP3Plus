@@ -50,6 +50,7 @@ public class FileIO {
 
                 for (String savedMovie : userFromList.getSavedMedia()) {
                     previousUsers += savedMovie + ",";
+
                 }
                 previousUsers = previousUsers.substring(0,previousUsers.length()-1) + "\n";
             }
