@@ -9,7 +9,12 @@ public class UserMenu {
     String path = "src/users.txt";
     ArrayList<User> users = new ArrayList<>();
 
-    public User start() {
+    DBConnector dbc = new DBConnector();
+
+    String loadType;
+
+    public User start(String type) {
+        this.loadType = type;
         loadUsers();
         getChoice();
         return user;
@@ -32,31 +37,19 @@ public class UserMenu {
     }
 
     void loadUsers() {
-        ArrayList<String> usersText = fileIO.loadUsers(path);
-        for (String user : usersText) {
-            String[] values = user.split(";");
-            ArrayList<String> seenMediaList = new ArrayList<>();
-            String[] seenMedias = values[3].split(",");
-            for (int i = 0; i < seenMedias.length; i++) {
-                seenMediaList.add(seenMedias[i]);
-            }
-            ArrayList<String> savedMediaList = new ArrayList<>();
-            String[] savedMedia = values[4].split(",");
-            for (int i = 0; i < savedMedia.length; i++) {
-                savedMediaList.add(savedMedia[i]);
-            }
-            users.add(new User(values[0].trim(), values[1].trim(), Integer.parseInt(values[2]), seenMediaList, savedMediaList));
-
+        if (loadType.equals("txt")) {
+            users = fileIO.loadUsers();
         }
-        System.out.println(users);
+        else if (loadType.equals("db")) {
+            users = dbc.loadUsers();
+            System.out.println(users);
+        }
     }
 
 
     void signup() {
         ArrayList<String> seenMedias = new ArrayList<>();
         ArrayList<String> savedMedias = new ArrayList<>();
-        seenMedias.add("0");
-        savedMedias.add("0");
         String password = "";
         String username = "";
         while (true) {
@@ -69,14 +62,24 @@ public class UserMenu {
                     System.out.println("This username already exist!");
                 }
             }
-            if (userExist == false) {
+            if (!userExist) {
                 break;
             }
         }
 
         user = new User(username, password, users.size() + 1, seenMedias, savedMedias);
-        fileIO.signupUser("src/users.txt", user, users);
         users.add(user);
+
+        if(loadType.equals("txt")) {
+            seenMedias.add("0");
+            savedMedias.add("0");
+            fileIO.signupUser("src/users.txt", users);
+        }
+
+        else if(loadType.equals("db")) {
+            dbc.signupUser(user);
+        }
+
         System.out.println("User has been saved");
     }
 

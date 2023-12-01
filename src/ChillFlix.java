@@ -8,10 +8,13 @@ public class ChillFlix {
     TextUI textUI = new TextUI();
     UserMenu userMenu = new UserMenu();
 
-    void start() {
-        user = userMenu.start();
+    String loadType; //It can be 'txt' or 'db'. Set it in main
+
+    void start(String type) {
+        this.loadType = type;
+        user = userMenu.start(type);
         users = userMenu.getUsers();
-        medias = CreateMedia.loadMediaDataTxt();
+        medias = CreateMedia.loadMediaDataDB();
         getChoice();
         userMenu.saveUsers(users);
     }

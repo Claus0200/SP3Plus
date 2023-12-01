@@ -11,7 +11,7 @@ public class FileIO {
     Scanner scan;                         // Declaring the variable scan.
 
 
-    public ArrayList<String> loadUsers(String path) {
+    public ArrayList<String> loadText(String path) {
 
         ArrayList<String> text = new ArrayList<>();     // Declaring a variable to a new ArrayList.
         File file = new File(path);                     // Declaring a new file, with path as parameter.
@@ -31,7 +31,8 @@ public class FileIO {
         return text;
     }
 
-    public void signupUser(String path, User user, ArrayList<User> users) {
+    public void signupUser(String path, ArrayList<User> users) {
+        User user = users.get(users.size()-1);
 
         try {
 
@@ -90,6 +91,28 @@ public class FileIO {
         } catch (IOException e) {
             System.out.println("Something went wrong");
         }
+    }
+
+    public ArrayList<User> loadUsers() {
+        ArrayList<User> users = new ArrayList<>();
+        ArrayList<String> usersText = loadText("src/users.txt");
+        for (String user : usersText) {
+            String[] values = user.split(";");
+            ArrayList<String> seenMediaList = new ArrayList<>();
+            String[] seenMedias = values[3].split(",");
+            for (int i = 0; i < seenMedias.length; i++) {
+                seenMediaList.add(seenMedias[i]);
+            }
+            ArrayList<String> savedMediaList = new ArrayList<>();
+            String[] savedMedia = values[4].split(",");
+            for (int i = 0; i < savedMedia.length; i++) {
+                savedMediaList.add(savedMedia[i]);
+            }
+            users.add(new User(values[0].trim(), values[1].trim(), Integer.parseInt(values[2]), seenMediaList, savedMediaList));
+
+        }
+        System.out.println(users);
+        return users;
     }
 
     public ArrayList<String> readMediaData(String path) {

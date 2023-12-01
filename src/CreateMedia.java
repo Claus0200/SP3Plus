@@ -1,4 +1,6 @@
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import java.sql.*;
 
 public class CreateMedia extends DBConnector {
     static ArrayList<Media> medias = new ArrayList<>();
@@ -12,7 +14,8 @@ public class CreateMedia extends DBConnector {
     }
 
     static ArrayList<Media> loadMediaDataDB() {
-        DBConnector.readMovies();
+        ArrayList<Media> mediaFromDB1 = DBConnector.readMedia();
+        medias.addAll(mediaFromDB1);
         return medias;
     }
 
@@ -49,13 +52,11 @@ public class CreateMedia extends DBConnector {
         }
     }
 
-    public static void createMediaDB() {
+    /*public static void createMediaDB() {
 
-      ArrayList<Media> DatabaseMedias = new ArrayList<>();
-      for(int i = 0; Data)
-
-
-
+        ArrayList<Media> databaseMedias = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
 
 
 
@@ -64,7 +65,10 @@ public class CreateMedia extends DBConnector {
 
 
 
-    }
+
+
+
+    }*/
 
 
 

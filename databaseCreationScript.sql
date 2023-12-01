@@ -250,21 +250,21 @@ CREATE TABLE IF NOT EXISTS `chillflix`.`user` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `chillflix`.`watched_movie` (
   `userID` INT NOT NULL,
-  `movieID` INT NULL DEFAULT NULL,
-  PRIMARY KEY (`userID`),
-  INDEX `movieID_idx` (`movieID` ASC) VISIBLE,
-  CONSTRAINT `movieID`
-    FOREIGN KEY (`movieID`)
-    REFERENCES `chillflix`.`movie` (`movieID`));
+  `movieID` INT NOT NULL,
+  UNIQUE KEY `movieuserID` (`userID`,`movieID`),
+  KEY `movieID_idx` (`movieID`),
+  KEY `userID_idx` (`userID`),
+  CONSTRAINT `movieID` FOREIGN KEY (`movieID`) REFERENCES `movie` (`movieID`),
+  CONSTRAINT `userIDmovie` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`));
 
 -- -----------------------------------------------------
 -- Table `chillflix`.`watched_serie`
 -- -----------------------------------------------------
-CREATE TABLE `chillflix`.`watched_serie` (
+CREATE TABLE IF NOT EXISTS `chillflix`.`watched_serie` (
   `userID` INT NOT NULL,
-  `serieID` INT NULL DEFAULT NULL,
-  PRIMARY KEY (`userID`),
-  INDEX `serieID_idx` (`serieID` ASC) VISIBLE,
-  CONSTRAINT `serieID`
-    FOREIGN KEY (`serieID`)
-    REFERENCES `chillflix`.`serie` (`serieID`));
+  `serieID` INT NOT NULL,
+  UNIQUE KEY `serieuserID` (`userID`,`serieID`),
+  KEY `serieID_idx` (`serieID`),
+  KEY `userID_idx` (`userID`),
+  CONSTRAINT `serieID` FOREIGN KEY (`serieID`) REFERENCES `serie` (`serieID`),
+  CONSTRAINT `userIDserie` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`));
