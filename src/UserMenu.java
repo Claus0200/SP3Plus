@@ -84,8 +84,8 @@ public class UserMenu {
     }
 
     void login() {
-        boolean loginSucces = false;
-        while (!loginSucces) {
+        while (true) {
+            boolean loginSucces = false;
             String username = textUI.getUserInput("Username: ");
             String password = textUI.getUserInput("Password: ");
             for (User user : users) {
@@ -98,11 +98,20 @@ public class UserMenu {
             if (!loginSucces) {
                 System.out.println("You failed to login, try again");
             }
+            else if (loginSucces) {
+                break;
+            }
         }
     }
 
-    void saveUsers(ArrayList<User> usersList) {
-        fileIO.saveUsers(path, usersList);
+    void saveUsers(ArrayList<User> usersList, User user) {
+
+        if (loadType.equals("db")) {
+            dbc.saveUserDB(user);
+        }
+        else if (loadType.equals("txt")) {
+            fileIO.saveUsers(path, usersList);
+        }
     }
 }
 

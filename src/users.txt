@@ -1,5 +1,5 @@
 Username;Password;ID;SeenMedias;SavedMedias
 Admin;666;1;2,64;2,64
-Claus;123;2;66,99,198;66,103,198
+Claus;123;2;66,99,101;66,101
 Ferdi;231;3;43,74;43,74
 Mahdi;312;4;68,69;69,103

@@ -16,7 +16,7 @@ public class ChillFlix {
         users = userMenu.getUsers();
         medias = CreateMedia.loadMediaDataDB();
         getChoice();
-        userMenu.saveUsers(users);
+        userMenu.saveUsers(users,user);
     }
 
     public void getChoice() {

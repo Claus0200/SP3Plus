@@ -52,24 +52,4 @@ public class CreateMedia extends DBConnector {
         }
     }
 
-    /*public static void createMediaDB() {
-
-        ArrayList<Media> databaseMedias = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement stmt = null;
-
-
-
-
-
-
-
-
-
-
-
-    }*/
-
-
-
 }

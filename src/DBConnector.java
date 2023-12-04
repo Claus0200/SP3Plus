@@ -23,9 +23,6 @@ public class DBConnector {
             //STEP 2: Open a connection
             conn = loginDB();
 
-            //STEP 3: Execute a query
-            System.out.println("Creating statement...");
-
             ResultSet rs = null;
             String sql = "SELECT mediaID, title, category, year, rating, episode FROM chillflix.media";
             stmt = conn.prepareStatement(sql);
@@ -60,9 +57,6 @@ public class DBConnector {
                     }
                     databaseMedias.add(new Serie(id, title, year, rating, categoriesArr, episodeArr));
                 }
-            }
-            for (Media media : databaseMedias) {
-                System.out.println(media.ID + "; " + media.getTitel());
             }
 
             //STEP 5: Clean-up environment
@@ -108,9 +102,6 @@ public class DBConnector {
 
             //STEP 2: Open a connection
             conn = loginDB();
-
-            //STEP 3: Execute a query
-            System.out.println("Creating statement...");
 
             ResultSet rs = null;
             String userSQL = "SELECT userID, username, password FROM chillflix.user";
@@ -195,7 +186,6 @@ public class DBConnector {
     public void saveUserDB(User user) {
         Connection conn = null;
         PreparedStatement stmt = null;
-
         try {
             //STEP 1: Register JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -203,13 +193,75 @@ public class DBConnector {
             //STEP 2: Open a connection
             conn = loginDB();
 
-            //STEP 3: Execute a query
-            System.out.println("Creating statement...");
-
             ResultSet rs = null;
-            String sql = "UPDATE chillflix.watched_movie SET";
-            stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery(sql);
+
+
+            for (String media : user.getSeenMedia()) {
+                try {
+                    String insertSQL = "INSERT INTO chillflix.watched_media (userID,mediaID) VALUES (?,?)";
+                    stmt = conn.prepareStatement(insertSQL);
+                    stmt.setInt(1, user.id);
+                    stmt.setInt(2, Integer.parseInt(media));
+                    stmt.executeUpdate();
+                }
+                catch(SQLException ignored) {
+                }
+            }
+
+            for (String media : user.getSavedMedia()) {
+                try {
+                    String insertSQL = "INSERT INTO chillflix.saved_media (userID,mediaID) VALUES (?,?)";
+                    stmt = conn.prepareStatement(insertSQL);
+                    stmt.setInt(1, user.id);
+                    stmt.setInt(2, Integer.parseInt(media));
+                    stmt.executeUpdate();
+                }
+                catch(SQLException ignored) {
+
+                }
+            }
+
+            String savedMediaSQL = "SELECT userID, mediaID FROM chillflix.saved_media WHERE userID = " + user.id;
+            stmt = conn.prepareStatement(savedMediaSQL);
+            rs = stmt.executeQuery(savedMediaSQL);
+
+            ArrayList<Integer> removeID = new ArrayList<>();
+
+            while (rs.next()) {
+                //Retrieve by column name
+                int userID = rs.getInt("userID");
+                int mediaID = rs.getInt("mediaID");
+
+                boolean remove = true;
+
+                //For loop for every movie in user's seen medias
+                for (String id: user.getSavedMedia()) {
+
+                    //If it does exist
+                    if(id.equals(String.valueOf(mediaID))) {
+                        remove = false;
+                    }
+
+                }
+
+                if (remove) {
+                    removeID.add(mediaID);
+                }
+
+            }
+
+            for (int id : removeID) {
+                try {
+                    String deleteSQL = "DELETE FROM chillflix.saved_media WHERE userID = ? AND mediaID = ?";
+                    stmt = conn.prepareStatement(deleteSQL);
+                    stmt.setInt(1, user.id);
+                    stmt.setInt(2, id);
+                    stmt.execute();
+                }
+                catch(SQLException ignored) {
+                }
+            }
+
 
             //STEP 5: Clean-up environment
             rs.close();
@@ -252,15 +304,16 @@ public class DBConnector {
             //STEP 2: Open a connection
             conn = loginDB();
 
-            //STEP 3: Execute a query
-            System.out.println("Creating statement...");
-            ResultSet rs = null;
-            String sql = "INSERT INTO user (username,password) VALUES (user.getUsername(),user.getPassword())";
+            String sql = "INSERT INTO chillflix.user (username,password) VALUES (?,?)";
+
             stmt = conn.prepareStatement(sql);
-            stmt.execute(sql);
+
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getPassword());
+
+            stmt.executeUpdate();
 
             //STEP 5: Clean-up environment
-            rs.close();
             stmt.close();
             conn.close();
 
